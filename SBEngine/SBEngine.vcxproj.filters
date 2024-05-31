@@ -15,15 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="WindowManager\WindowManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Direct3DResources.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Direct3DResources.hpp">
+    <ClInclude Include="WindowManager\WindowManager.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="Direct3DResources.cpp">
+    <ClInclude Include="Direct3DResources.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

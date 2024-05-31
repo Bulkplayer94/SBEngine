@@ -16,5 +16,6 @@ namespace SBEngine {
 
 		bool Init();
 		bool Resize();
+		bool Release();
 	} extern Direct3DResources;
 }
