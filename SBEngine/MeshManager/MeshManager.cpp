@@ -7,7 +7,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <mio.hpp>
-#include "../Direct3DResources.hpp"
+#include "../Direct3DResources/Direct3DResources.hpp"
 #include <DirectXMath.h>
 #include "../PhysXManager/PhysXManager.hpp"
 

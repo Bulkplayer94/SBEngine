@@ -4,10 +4,13 @@
 #include <string>
 #include <DirectXMath.h>
 #include <d3d11_4.h>
-#include "../Direct3DResources.hpp"
+#include "../Direct3DResources/Direct3DResources.hpp"
 
 static LRESULT WINAPI WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
     switch (Msg) {
+    case WM_SIZE:
+        SBEngine::Direct3DResources.Resize();
+        return 0;
     case WM_SYSCOMMAND:
         if ((wParam & 0xFFF0) == SC_KEYMENU) // Disable ALT application menu
             return 0;

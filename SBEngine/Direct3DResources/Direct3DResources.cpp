@@ -62,27 +62,28 @@ bool Direct3DResources_t::Init(HWND hWnd)
 #endif // _DEBUG
 
 	{
-		IDXGIFactory5* dxgiFactory;
+		IDXGIFactory2* dxgiFactory;
 		{
-			IDXGIDevice4* dxgiDevice;
-			HRESULT hResult = d3d11Device->QueryInterface(__uuidof(IDXGIDevice4), (void**)&dxgiDevice);
+			IDXGIDevice1* dxgiDevice;
+			HRESULT hResult = d3d11Device->QueryInterface(__uuidof(IDXGIDevice1), (void**)&dxgiDevice);
 			if (FAILED(hResult)) {
 				std::cout << "DXGIDevice5 Creation Failed!" << std::endl;
 				return false;
 			}
 
-			IDXGIAdapter3* dxgiAdapter;
-			hResult = dxgiDevice->QueryInterface(__uuidof(IDXGIAdapter3), (void**)&dxgiAdapter);
+			IDXGIAdapter* dxgiAdapter;
+			hResult = dxgiDevice->GetAdapter((IDXGIAdapter**)&dxgiAdapter);
 			if (FAILED(hResult)) {
-				std::cout << "IDXGIAdapter3 Creation Failed!" << std::endl;
+				std::cout << "IDXGIAdapter Creation Failed!" << std::endl;
 				return false;
 			}
+			dxgiDevice->Release();
 
-			DXGI_ADAPTER_DESC2 adapterDesc;
-			dxgiAdapter->GetDesc2(&adapterDesc);
+			DXGI_ADAPTER_DESC adapterDesc;
+			dxgiAdapter->GetDesc(&adapterDesc);
 			std::wcout << L"Graphics Device: " << adapterDesc.Description << std::endl;
 
-			hResult = dxgiAdapter->GetParent(__uuidof(IDXGIFactory5), (void**)&dxgiFactory);
+			hResult = dxgiAdapter->GetParent(__uuidof(IDXGIFactory2), (void**)&dxgiFactory);
 			if (FAILED(hResult)) {
 				std::cout << "IDXGIFactory5 Creation Failed!" << std::endl;
 				return false;
@@ -92,27 +93,28 @@ bool Direct3DResources_t::Init(HWND hWnd)
 		}
 
 		DXGI_SWAP_CHAIN_DESC1 d3d11SwapChainDesc = {};
-		d3d11SwapChainDesc.Width = 0;
-		d3d11SwapChainDesc.Height = 0;
-		d3d11SwapChainDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		d3d11SwapChainDesc.Width = 0; // use window width
+		d3d11SwapChainDesc.Height = 0; // use window height
+		d3d11SwapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 		d3d11SwapChainDesc.SampleDesc.Count = 1;
 		d3d11SwapChainDesc.SampleDesc.Quality = 0;
 		d3d11SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		d3d11SwapChainDesc.BufferCount = 2;
-		d3d11SwapChainDesc.Scaling = DXGI_SCALING_ASPECT_RATIO_STRETCH;
+		d3d11SwapChainDesc.Scaling = DXGI_SCALING_STRETCH;
 		d3d11SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		d3d11SwapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;
 		d3d11SwapChainDesc.Flags = 0;
 
-		IDXGISwapChain1* interpretedSwapChain = reinterpret_cast<IDXGISwapChain1*>(dxgiSwapChain);
+		IDXGISwapChain1* interpretedSwapChain;
 		HRESULT hResult = dxgiFactory->CreateSwapChainForHwnd(d3d11Device, hWnd, &d3d11SwapChainDesc, NULL, NULL, &interpretedSwapChain);
 		if (FAILED(hResult)) {
 			std::cout << "Swap Chain Creation Failed!" << std::endl;
 			return false;
 		}
+		dxgiSwapChain = reinterpret_cast<IDXGISwapChain4*>(interpretedSwapChain);
 	}
 
-	Resize();
+	Resize(true);
 
 	{
 		D3D11_RASTERIZER_DESC2 rasterizerDesc = {};
@@ -186,7 +188,7 @@ bool Direct3DResources_t::Resize(bool firstTime)
 	}
 
 	ID3D11Texture2D* d3d11FrameBuffer;
-	HRESULT hResult = dxgiSwapChain->GetBuffer(0, __uuidof(ID3D11Texture3D), (void**)&d3d11FrameBuffer);
+	HRESULT hResult = dxgiSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&d3d11FrameBuffer);
 	if (FAILED(hResult))
 		goto FAILURE_END;
 
@@ -203,10 +205,11 @@ bool Direct3DResources_t::Resize(bool firstTime)
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 	ID3D11Texture2D* depthBuffer;
-	d3d11Device->CreateTexture2D(&depthBufferDesc, nullptr, &depthBuffer);
+	hResult = d3d11Device->CreateTexture2D(&depthBufferDesc, nullptr, &depthBuffer);
+	if (FAILED(hResult))
+		goto FAILURE_END;
 
 	d3d11Device->CreateDepthStencilView(depthBuffer, nullptr, &d3d11DepthStencilView);
-
 	depthBuffer->Release();
 
 	return true;

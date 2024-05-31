@@ -57,6 +57,8 @@ bool WindowManager_t::Init(const std::string& WindowName, const DirectX::XMFLOAT
 		return false;
 	}
 
+	SBEngine::Direct3DResources.Init(WindowHandle);
+
 	// Show window
 	ShowWindow(this->WindowHandle, SW_SHOWDEFAULT);
 	UpdateWindow(this->WindowHandle);
@@ -104,18 +106,15 @@ void WindowManager_t::End() {
 
 	MSG Message;
 	while (::PeekMessage(&Message, nullptr, 0U, 0U, PM_REMOVE)) {
-		::TranslateMessage(&Message);
-		::DispatchMessage(&Message);
-
 		switch (Message.message) {
 			case WM_QUIT: {
 				SBEngine::Direct3DResources.Release();
 				this->IsRunning = false;
 				break;
 			}
-			case WM_SIZE: {
-				SBEngine::Direct3DResources.Resize();
-			}
 		}
+
+		::TranslateMessage(&Message);
+		::DispatchMessage(&Message);
 	}
 }
