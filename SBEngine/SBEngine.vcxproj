@@ -106,12 +106,14 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>"$(SolutionDir)\libs\*.lib" /VERBOSE:UNUSEDLIBS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>"$(SolutionDir)\libs\$(Platform)\$(Configuration)\*.lib" /VERBOSE:UNUSEDLIBS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,6 +126,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +134,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>"$(SolutionDir)\libs\*.lib" /VERBOSE:UNUSEDLIBS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>"$(SolutionDir)\libs\$(Platform)\$(Configuration)\*.lib" /VERBOSE:UNUSEDLIBS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libs\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -146,6 +150,7 @@
     <ClCompile Include="Logger\Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeshManager\MeshManager.cpp" />
+    <ClCompile Include="PhysXManager\PhysXManager.cpp" />
     <ClCompile Include="WindowManager\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +165,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Logger\Logger.hpp" />
     <ClInclude Include="MeshManager\MeshManager.hpp" />
+    <ClInclude Include="PhysXManager\PhysXManager.hpp" />
     <ClInclude Include="WindowManager\WindowManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

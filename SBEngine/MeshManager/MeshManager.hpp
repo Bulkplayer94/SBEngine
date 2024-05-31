@@ -7,7 +7,7 @@
 
 struct Shader;
 
-namespace BEngine {
+namespace SBEngine {
 
 	struct Texture {
 
@@ -53,7 +53,7 @@ namespace BEngine {
 
 	};
 
-	struct MeshManager {
+	struct MeshManager_t {
 		std::map<std::string, Mesh*> meshList;
 
 		void StartLoading();

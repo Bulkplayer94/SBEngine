@@ -51,6 +51,9 @@
     <ClCompile Include="MeshManager\MeshManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="PhysXManager\PhysXManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3DResources.hpp">
@@ -87,6 +90,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="MeshManager\MeshManager.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysXManager\PhysXManager.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

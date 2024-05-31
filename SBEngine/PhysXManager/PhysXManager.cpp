@@ -2,7 +2,9 @@
 #include <iostream>
 #include <Windows.h>
 
-PhysXManager_t PhysXManager;
+using namespace SBEngine;
+
+SBEngine::PhysXManager_t SBEngine::PhysXManager;
 
 static bool ConsoleEventOccured = false;
 

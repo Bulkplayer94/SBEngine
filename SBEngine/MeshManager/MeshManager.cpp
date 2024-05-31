@@ -17,7 +17,7 @@
 #include <cooking/PxCooking.h>
 
 using JSON = nlohmann::json;
-using namespace BEngine;
+using namespace SBEngine;
 using namespace physx;
 
 struct VertexData {
@@ -26,7 +26,7 @@ struct VertexData {
 	float norm[3];
 };
 
-BEngine::MeshManager BEngine::meshManager = {};
+SBEngine::MeshManager_t SBEngine::meshManager = {};
 
 ID3D11ShaderResourceView* LoadTexture(const std::string& FilePath) {
 	int TextureWidth, TextureHeight, TextureChannels = 0;
@@ -60,7 +60,7 @@ ID3D11ShaderResourceView* LoadTexture(const std::string& FilePath) {
 	return TextureView;
 }
 
-void MeshManager::StartLoading() {
+void MeshManager_t::StartLoading() {
 	std::filesystem::directory_iterator DirectoryIterator("meshes");
 	for (const std::filesystem::directory_entry& Directory : DirectoryIterator) {
 
