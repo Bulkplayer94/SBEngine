@@ -82,8 +82,7 @@ void MeshManager_t::StartLoading() {
 			continue;
 		}
 
-		JSON JsonData;
-		JsonData.parse(std::string(MappedFile.begin(), MappedFile.end()));
+		JSON JsonData = JSON::parse(std::string(MappedFile.begin(), MappedFile.end()));
 
 		MappedFile.unmap();
 
@@ -103,19 +102,19 @@ void MeshManager_t::StartLoading() {
 		
 		const aiScene* Scene = Importer.ReadFile(PathString + "\\" + JsonData["modelMesh"].get<std::string>(), aiProcess_Triangulate | aiProcess_ConvertToLeftHanded | aiProcess_GenUVCoords);
 
-		for (int SceneIterator = 0; SceneIterator < Scene->mNumMeshes; ++SceneIterator) {
+		for (unsigned int SceneIterator = 0; SceneIterator < Scene->mNumMeshes; ++SceneIterator) {
 			Model NewModel;
 
 			const aiMesh* Mesh = Scene->mMeshes[SceneIterator];
 
 			std::vector<VertexData> VertexVec;
-			for (int VertexIterator = 0; VertexIterator < Mesh->mNumVertices; ++VertexIterator) {
+			for (unsigned int VertexIterator = 0; VertexIterator < Mesh->mNumVertices; ++VertexIterator) {
 				aiVector3D VertexP = Mesh->mVertices[VertexIterator];
 				aiVector3D VertexN = Mesh->mNormals[VertexIterator];
 
 				float VertexU, VertexV;
 
-				if (Mesh->mNumUVComponents[SceneIterator] > VertexIterator) {
+				if (Mesh->mNumUVComponents[SceneIterator] > static_cast<int>(VertexIterator)) {
 					VertexU = Mesh->mTextureCoords[SceneIterator][VertexIterator].x;
 					VertexV = Mesh->mTextureCoords[SceneIterator][VertexIterator].y;
 				} else {
@@ -134,7 +133,7 @@ void MeshManager_t::StartLoading() {
 			}
 
 			std::vector<unsigned int> IndiceVec;
-			for (int FaceIterator = 0; FaceIterator < Mesh->mNumFaces; ++FaceIterator) {
+			for (unsigned int FaceIterator = 0; FaceIterator < Mesh->mNumFaces; ++FaceIterator) {
 				aiFace* Face = &Mesh->mFaces[FaceIterator];
 				for (unsigned int IndiceIterator = 0; IndiceIterator < Face->mNumIndices; ++IndiceIterator) {
 					IndiceVec.push_back(Face->mIndices[IndiceIterator]);
@@ -142,7 +141,7 @@ void MeshManager_t::StartLoading() {
 			}
 
 			D3D11_BUFFER_DESC vertexBufferDesc = {};
-			vertexBufferDesc.ByteWidth = sizeof(VertexData) * VertexVec.size();
+			vertexBufferDesc.ByteWidth = sizeof(VertexData) * static_cast<int>(VertexVec.size());
 			vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 			vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
@@ -153,7 +152,7 @@ void MeshManager_t::StartLoading() {
 				assert("Vertex Buffer Creation Failed");
 
 			D3D11_BUFFER_DESC indiceBufferDesc = {};
-			indiceBufferDesc.ByteWidth = sizeof(unsigned int) * IndiceVec.size();
+			indiceBufferDesc.ByteWidth = sizeof(unsigned int) * static_cast<int>(IndiceVec.size());
 			indiceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 			indiceBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
@@ -170,13 +169,13 @@ void MeshManager_t::StartLoading() {
 			}
 
 			NewModel.modelTexture.diffuseMap = LoadTexture(PathString + "\\" + JsonData["material"]["volume"].get<std::string>());
-			NewModel.numIndices = IndiceVec.size();
+			NewModel.numIndices = static_cast<int>(IndiceVec.size());
 
 			LoadedMesg->AddModel(NewModel);
 		}
 
 		PxConvexMeshDesc ConvexMeshDesc;
-		ConvexMeshDesc.points.count = AllVerticies.size();
+		ConvexMeshDesc.points.count = static_cast<int>(AllVerticies.size());
 		ConvexMeshDesc.points.data = AllVerticies.data();
 		ConvexMeshDesc.points.stride = sizeof(DirectX::XMFLOAT3);
 		ConvexMeshDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
