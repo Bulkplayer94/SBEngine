@@ -7,7 +7,31 @@
 
 WindowManager_t WindowManager;
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, Msg, wParam, lParam))
+		return 0;
+	
+	switch (Msg) {
+	case WM_SIZE:
+		SBEngine::Direct3DResources.Resize();
+		WindowManager_t::WindowSize = DirectX::XMFLOAT2(static_cast<float>(LOWORD(wParam)), static_cast<float>(HIWORD(lParam)));
+		return 0;
+	case WM_SYSCOMMAND:
+		if ((wParam & 0xFFF0) == SC_KEYMENU) // Disable ALT application menu
+			return 0;
+		break;
+	case WM_DESTROY:
+		::PostQuitMessage(0);
+		return 0;
+	}
+	return ::DefWindowProcW(hWnd, Msg, wParam, lParam);
+}
+
 bool WindowManager_t::Init(const std::string& WindowName, const DirectX::XMFLOAT2& WindowSize) {
+
+	this->WindowSize = WindowSize;
+
 	// Center the window
 	DirectX::XMFLOAT2 WindowPos = { 0.0f, 0.0f };
 
@@ -57,12 +81,6 @@ bool WindowManager_t::Init(const std::string& WindowName, const DirectX::XMFLOAT
 		return false;
 	}
 
-	SBEngine::Direct3DResources.Init(WindowHandle);
-
-	// Show window
-	ShowWindow(this->WindowHandle, SW_SHOWDEFAULT);
-	UpdateWindow(this->WindowHandle);
-	
 	this->IsRunning = true;
 
 	return true;
@@ -83,6 +101,10 @@ bool WindowManager_t::HookupImGui() {
 		return false;
 	}
 
+	// Show window
+	ShowWindow(this->WindowHandle, SW_SHOWDEFAULT);
+	UpdateWindow(this->WindowHandle);
+
 	this->IsRunning = true;
 	return true;
 }
@@ -93,6 +115,11 @@ void WindowManager_t::Begin() {
 	ImGui::NewFrame();
 	
 	SBEngine::Direct3DResources.d3d11DeviceContext->ClearRenderTargetView(SBEngine::Direct3DResources.d3d11RenderTargetView, CanvasColor);
+	SBEngine::Direct3DResources.d3d11DeviceContext->ClearDepthStencilView(SBEngine::Direct3DResources.d3d11DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	
+	D3D11_VIEWPORT ViewPort = { 0.0f, 0.0f, static_cast<FLOAT>(this->WindowSize.x), static_cast<FLOAT>(this->WindowSize.y) };
+	SBEngine::Direct3DResources.d3d11DeviceContext->RSSetViewports(1, &ViewPort);
+
 }
 
 void WindowManager_t::End() {

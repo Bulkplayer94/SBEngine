@@ -61,7 +61,7 @@ ID3D11ShaderResourceView* LoadTexture(const std::string& FilePath) {
 }
 
 void MeshManager_t::StartLoading() {
-	std::filesystem::directory_iterator DirectoryIterator("meshes");
+	std::filesystem::directory_iterator DirectoryIterator("Data\\Meshes");
 	for (const std::filesystem::directory_entry& Directory : DirectoryIterator) {
 
 		if (!Directory.is_directory())

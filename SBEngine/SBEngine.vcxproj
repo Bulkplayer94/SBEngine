@@ -151,6 +151,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MeshManager\MeshManager.cpp" />
     <ClCompile Include="PhysXManager\PhysXManager.cpp" />
+    <ClCompile Include="ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="WindowManager\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +167,7 @@
     <ClInclude Include="Logger\Logger.hpp" />
     <ClInclude Include="MeshManager\MeshManager.hpp" />
     <ClInclude Include="PhysXManager\PhysXManager.hpp" />
+    <ClInclude Include="ShaderManager\ShaderManager.hpp" />
     <ClInclude Include="WindowManager\WindowManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
