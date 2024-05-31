@@ -134,6 +134,8 @@ bool Direct3DResources_t::Init(HWND hWnd)
 			std::cout << "Rasterizer State Creation Failed!" << std::endl;
 			return false;
 		}
+		
+		d3d11DeviceContext->RSSetState(reinterpret_cast<ID3D11RasterizerState*>(d3d11RasterizerState));
 	}
 
 	{
@@ -147,6 +149,8 @@ bool Direct3DResources_t::Init(HWND hWnd)
 			std::cout << "Depth Stencil State Creation Failed!" << std::endl;
 			return false;
 		}
+
+		d3d11DeviceContext->OMSetDepthStencilState(d3d11DepthStencilState, 0);
 	}
 
 	{
@@ -168,7 +172,11 @@ bool Direct3DResources_t::Init(HWND hWnd)
 			std::cout << "Sampler State Creation Failed!" << std::endl;
 			return false;
 		}
+
+		d3d11DeviceContext->PSSetSamplers(0, 1, &d3d11SamplerState);
 	}
+
+	d3d11DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	return true;
 }
@@ -183,8 +191,6 @@ bool Direct3DResources_t::Resize(bool firstTime)
 		HRESULT hResult = dxgiSwapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
 		if (FAILED(hResult))
 			return false;
-
-		//perspectiveMat = makePerspectiveMat(windowAspectRatio, degreesToRadians(84), 0.1f, 1000.f);
 	}
 
 	ID3D11Texture2D* d3d11FrameBuffer;
@@ -210,6 +216,9 @@ bool Direct3DResources_t::Resize(bool firstTime)
 		goto FAILURE_END;
 
 	d3d11Device->CreateDepthStencilView(depthBuffer, nullptr, &d3d11DepthStencilView);
+
+	d3d11DeviceContext->OMSetRenderTargets(1,  reinterpret_cast<ID3D11RenderTargetView* const*>(&d3d11RenderTargetView), d3d11DepthStencilView);
+
 	depthBuffer->Release();
 
 	return true;
