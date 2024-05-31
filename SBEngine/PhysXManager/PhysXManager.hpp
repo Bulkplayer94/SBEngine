@@ -3,7 +3,7 @@
 #include <PxPhysicsAPI.h>
 
 struct PhysXManager_t {
-
+public:
 	PxFoundation* mFoundation;
 	PxPvd* mPvd;
 	PxPhysics* mPhysics;

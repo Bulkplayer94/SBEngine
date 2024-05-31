@@ -3,6 +3,7 @@
 #include "../ImGui/imgui_impl_dx11.h"
 #include "../ImGui/imgui_impl_win32.h"
 #include <iostream>
+#include "../Logger/Logger.hpp"
 
 WindowManager_t WindowManager;
 
@@ -14,23 +15,47 @@ bool WindowManager_t::Init(const std::string& WindowName, const DirectX::XMFLOAT
 	const int ScreenHeight = GetSystemMetrics(SM_CYSCREEN);
 
 	WindowPos.x = ScreenWidth / 2 - WindowSize.x / 2;
-	WindowPos.y = ScreenWidth / 2 - WindowSize.y / 2;
+	WindowPos.y = ScreenHeight / 2 - WindowSize.y / 2;
 
+	std::wstring WWindowName(WindowName.begin(), WindowName.end());
 
-	// Create windowclass and window
-	const WNDCLASSA WindowClass = { CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, WindowName.c_str() };
-	ATOM ret = RegisterClassA(&WindowClass);
-	if (ret == 0) {
-		std::cout << "Failed to create windowclass " << std::hex << GetLastError() << std::endl;
+	const WNDCLASSEXW WindowClass = { 
+		sizeof(WindowClass), 
+		CS_CLASSDC, 
+		WndProc, 
+		0L, 
+		0L, 
+		GetModuleHandle(nullptr), 
+		nullptr, 
+		nullptr, 
+		nullptr, 
+		nullptr, 
+		WWindowName.c_str(),
+		nullptr
+	};
+	if (!RegisterClassExW(&WindowClass)) {
+		Logger.HandleError(__LINE__, __FILE__);
 		return false;
 	}
 
-	this->WindowHandle = CreateWindowA(WindowName.c_str(), WindowName.c_str(), WS_OVERLAPPEDWINDOW, static_cast<UINT>(WindowPos.x), static_cast<UINT>(WindowPos.y), static_cast<UINT>(WindowSize.x), static_cast<UINT>(WindowSize.y), NULL, NULL, WindowClass.hInstance, NULL);
-	if (this->WindowHandle == INVALID_HANDLE_VALUE) {
-		std::cout << "Failed to create window " << std::hex << GetLastError() << std::endl;
+	this->WindowHandle = CreateWindowW(
+		WWindowName.c_str(), 
+		WWindowName.c_str(),
+		WS_OVERLAPPEDWINDOW, 
+		static_cast<int>(WindowPos.x),
+		static_cast<int>(WindowPos.y),
+		static_cast<int>(WindowSize.x), 
+		static_cast<int>(WindowSize.y), 
+		NULL, 
+		NULL, 
+		WindowClass.hInstance, 
+		NULL
+	);
+
+	if (this->WindowHandle == INVALID_HANDLE_VALUE || this->WindowHandle == NULL) {
+		Logger.HandleError(__LINE__, __FILE__);
 		return false;
 	}
-
 
 	// Show window
 	ShowWindow(this->WindowHandle, SW_SHOWDEFAULT);
@@ -46,17 +71,18 @@ bool WindowManager_t::HookupImGui() {
 	ImGui::CreateContext();
 
 	if (!ImGui_ImplWin32_Init(this->WindowHandle)) {
-		std::cout << "'ImGui_ImplWin32_Init' failed " << std::hex << GetLastError() << std::endl;
+		Logger.HandleError(__LINE__, __FILE__);
 		this->IsRunning = false;
 		return false;
 	}
 	if (!ImGui_ImplDX11_Init(SBEngine::Direct3DResources.d3d11Device, SBEngine::Direct3DResources.d3d11DeviceContext)) {
-		std::cout << "'ImGui_ImplDX11_Init' failed " << std::hex << GetLastError() << std::endl;
+		Logger.HandleError(__LINE__, __FILE__);
 		this->IsRunning = false;
 		return false;
 	}
 
 	this->IsRunning = true;
+	return true;
 }
 
 void WindowManager_t::Begin() {

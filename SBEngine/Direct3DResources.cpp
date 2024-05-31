@@ -48,10 +48,10 @@ bool Direct3DResources_t::Init(HWND hWnd)
 		ID3D11Debug* d3d11Debug;
 		d3d11Device->QueryInterface(__uuidof(ID3D11Debug), (void**)&d3d11Debug);
 		if (d3d11Debug) {
-			ID3D11InfoQueue* d3d11InfoQueue;
+			ID3D11InfoQueue* d3d11InfoQueue = nullptr;
 			d3d11Debug->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)d3d11InfoQueue);
 			if (d3d11InfoQueue) {
-				d3d11InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION);
+				d3d11InfoQueue->SetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_CORRUPTION, true);
 				d3d11InfoQueue->GetBreakOnSeverity(D3D11_MESSAGE_SEVERITY_ERROR);
 				d3d11InfoQueue->Release();
 			}
@@ -80,9 +80,7 @@ bool Direct3DResources_t::Init(HWND hWnd)
 
 			DXGI_ADAPTER_DESC2 adapterDesc;
 			dxgiAdapter->GetDesc2(&adapterDesc);
-			std::cout << "Graphics Device: " <<
-				adapterDesc.Description <<
-				std::endl;
+			std::wcout << L"Graphics Device: " << adapterDesc.Description << std::endl;
 
 			hResult = dxgiAdapter->GetParent(__uuidof(IDXGIFactory5), (void**)&dxgiFactory);
 			if (FAILED(hResult)) {

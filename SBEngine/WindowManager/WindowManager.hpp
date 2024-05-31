@@ -6,7 +6,7 @@
 #include <d3d11_4.h>
 #include "../Direct3DResources.hpp"
 
-LRESULT WINAPI WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
+static LRESULT WINAPI WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam) {
     switch (Msg) {
     case WM_SYSCOMMAND:
         if ((wParam & 0xFFF0) == SC_KEYMENU) // Disable ALT application menu
