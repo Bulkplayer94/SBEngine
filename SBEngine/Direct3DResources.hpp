@@ -14,8 +14,14 @@ namespace SBEngine {
 		ID3D11DepthStencilView* d3d11DepthStencilView = nullptr;
 		ID3D11RenderTargetView1* d3d11RenderTargetView = nullptr;
 
+<<<<<<< Updated upstream
 		bool Init();
 		bool Resize();
 		bool Release();
+=======
+		bool Init(HWND hWnd);
+		bool Resize(bool firstTime = false)
+
+>>>>>>> Stashed changes
 	} extern Direct3DResources;
 }
