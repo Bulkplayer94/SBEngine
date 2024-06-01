@@ -54,6 +54,12 @@
     <ClCompile Include="PhysXManager\PhysXManager.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderManager\ShaderManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Direct3DResources\Direct3DResources.hpp">
@@ -93,6 +99,15 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="PhysXManager\PhysXManager.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager\ShaderManager.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="MathDefinitions.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

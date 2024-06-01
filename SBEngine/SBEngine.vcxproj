@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Direct3DResources\Direct3DResources.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="WindowManager\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera\Camera.hpp" />
     <ClInclude Include="Direct3DResources\Direct3DResources.hpp" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Logger\Logger.hpp" />
+    <ClInclude Include="MathDefinitions.hpp" />
     <ClInclude Include="MeshManager\MeshManager.hpp" />
     <ClInclude Include="PhysXManager\PhysXManager.hpp" />
     <ClInclude Include="ShaderManager\ShaderManager.hpp" />

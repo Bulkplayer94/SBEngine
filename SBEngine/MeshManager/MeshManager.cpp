@@ -10,6 +10,7 @@
 #include "../Direct3DResources/Direct3DResources.hpp"
 #include <DirectXMath.h>
 #include "../PhysXManager/PhysXManager.hpp"
+#include "../Logger/Logger.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -179,19 +180,17 @@ void MeshManager_t::StartLoading() {
 		ConvexMeshDesc.points.data = AllVerticies.data();
 		ConvexMeshDesc.points.stride = sizeof(DirectX::XMFLOAT3);
 		ConvexMeshDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
-		
-		
-
 
 		PxCookingParams ConvexMeshParams(PhysXManager.mPhysics->getTolerancesScale());
 
 		PxConvexMesh* ConvexMesh = PxCreateConvexMesh(ConvexMeshParams, ConvexMeshDesc, PhysXManager.mPhysics->getPhysicsInsertionCallback());
 
-		// Erstelle eine Form mit dem konvexen Mesh
 		LoadedMesg->physicsModel = PhysXManager.mPhysics->createShape(PxConvexMeshGeometry(ConvexMesh), *PhysXManager.mMaterial, false);
 
 		ConvexMesh->release();
 
 		this->meshList[MeshName] = LoadedMesg;
+
+		Logger.ConsoleLog("Loaded Mesh: " + MeshName, Logger_t::LogType_DEFAULT);
 	}
 }

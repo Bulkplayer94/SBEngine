@@ -19,9 +19,9 @@ private:
 
 	// Constant Buffer for WorldMatrix, ViewMatrix, PerspectiveMatrix
 	struct CommonCBuffer_t {
-		DirectX::XMFLOAT4X4 worldMat;
-		DirectX::XMFLOAT4X4 perspectiveMat;
+		DirectX::XMFLOAT4X4 viewMat;
 		DirectX::XMFLOAT4X4 projectionMat;
+		DirectX::XMFLOAT4X4 viewProjMat;
 	};
 	ID3D11Buffer* commonCBuffer; // Register b0
 

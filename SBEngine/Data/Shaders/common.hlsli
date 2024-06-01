@@ -1,13 +1,14 @@
 cbuffer Common : register(b0)
 {
-    float4x4 worldMat;
+    float4x4 viewMat;
     float4x4 perspectiveMat;
-    float4x4 projectionMat;
+    float4x4 viewProjMat;
 }
 
 cbuffer Animation : register(b1)
 {
     float deltaTime;
+    double currTime;
 }
 
 cbuffer ModelMat : register(b2)
